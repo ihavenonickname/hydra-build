@@ -1,29 +1,5 @@
 # hydra-builder
 
-This template should help get you started developing with Vue 3 in Vite.
+> Hydra (or THC Hydra) is a parallelized network login cracker built in various operating systems, like Kali Linux, and other major penetration testing environments.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+Hydra commands can get really messy really fast. This web-based graphical interface helps Hydra users to build complex commands.
