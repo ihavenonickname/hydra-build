@@ -2,22 +2,40 @@
 import { ref } from 'vue'
 import { computed } from '@vue/reactivity';
 import General from '@/components/General.vue'
+import Services from '@/components/Services.vue'
 
 const errorsGeneral = ref([])
 const commandPartsGeneral = ref([])
 
-const errors = computed(() => [...errorsGeneral.value])
-const commandParts = computed(() => [...commandPartsGeneral.value])
+const errorsServices = ref([])
+const commandPartService = ref('')
+
+const errors = computed(() => [
+  ...errorsGeneral.value,
+  ...errorsServices.value
+])
+
+const commandParts = computed(() => [
+  ...commandPartsGeneral.value,
+  commandPartService.value
+])
+
 const command = computed(() => ['hydra', ...commandParts.value].join(' '))
+
 const commandIsValid = computed(() => errors.value.length === 0)
 
 function copyToClipboard() {
-  navigator.clipboard.writeText(command.value);
+  navigator.clipboard.writeText(command.value)
 }
 
 function handleUpdateGeneral(ev) {
   errorsGeneral.value = ev.errors
   commandPartsGeneral.value = ev.commandParts
+}
+
+function handleUpdateServices(ev) {
+  errorsServices.value = ev.errors
+  commandPartService.value = ev.commandPart
 }
 </script>
 
@@ -36,6 +54,7 @@ function handleUpdateGeneral(ev) {
 
     <General @update="handleUpdateGeneral" />
 
+    <Services @update="handleUpdateServices" />
 
     <div class="block">
       <section class="field-group">

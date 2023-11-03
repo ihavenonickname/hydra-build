@@ -23,7 +23,7 @@ function validateAndEmit() {
   if (target !== '') {
     emit('update:modelValue', { commandPart: target, error: null })
   } else {
-    emit('update:modelValue', { commandPart: null, error: 'Inform a valid target' })
+    emit('update:modelValue', { commandPart: null, error: 'Inform a non-empty target' })
   }
 }
 </script>
