@@ -1,33 +1,30 @@
 <script setup>
-import { ref } from 'vue'
-
-import Target from './components/Target.vue'
-import RestoreSession from './components/RestoreSession.vue'
-import UseOldSsl from './components/UseOldSsl.vue'
-import CustomPort from './components/CustomPort.vue'
-import Login from './components/Login.vue'
-import Password from './components/Password.vue'
-import AdditionalChecks from './components/AdditionalChecks.vue'
-
+import { defineAsyncComponent, ref } from 'vue'
 import { computed } from '@vue/reactivity';
 
-const refTargetState = ref({})
-const refRestoreSessionState = ref({})
-const refUseOldSslState = ref({})
-const refCustomPortState = ref({})
-const refLoginState = ref({})
-const refPasswordState = ref({})
-const refAdditionalChecksState = ref({})
+const components = [
+  defineAsyncComponent(() => import('./components/Target.vue')),
+  defineAsyncComponent(() => import('./components/RestoreSession.vue')),
+  defineAsyncComponent(() => import('./components/UseOldSsl.vue')),
+  defineAsyncComponent(() => import('./components/CustomPort.vue')),
+  defineAsyncComponent(() => import('./components/Login.vue')),
+  defineAsyncComponent(() => import('./components/Password.vue')),
+  defineAsyncComponent(() => import('./components/AdditionalChecks.vue')),
+  defineAsyncComponent(() => import('./components/LoopPasswords.vue')),
+  defineAsyncComponent(() => import('./components/ExitOnFirstFound.vue')),
+  defineAsyncComponent(() => import('./components/CustomParallelism.vue')),
+  defineAsyncComponent(() => import('./components/CustomTimeout.vue')),
+  defineAsyncComponent(() => import('./components/ConnectionDelay.vue')),
+  defineAsyncComponent(() => import('./components/AttemptDelay.vue')),
+  defineAsyncComponent(() => import('./components/PreferIpv6.vue')),
+  defineAsyncComponent(() => import('./components/Verbose.vue')),
+  defineAsyncComponent(() => import('./components/ShowAttempts.vue')),
+  defineAsyncComponent(() => import('./components/IgnoreRestore.vue')),
+]
 
-const states = computed(() => [
-  refTargetState.value,
-  refRestoreSessionState.value,
-  refUseOldSslState.value,
-  refCustomPortState.value,
-  refLoginState.value,
-  refPasswordState.value,
-  refAdditionalChecksState.value,
-])
+const states = ref([])
+
+states.value = components.map(() => ({}))
 
 const errors = computed(() => states.value
   .map(({ error }) => error)
@@ -46,6 +43,11 @@ const commandIsValid = computed(() => errors.value.length === 0)
 function copyToClipboard() {
   navigator.clipboard.writeText(command.value);
 }
+
+function updateState(component, newState) {
+  const i = components.indexOf(component)
+  states.value[i] = newState
+}
 </script>
 
 <template>
@@ -58,13 +60,9 @@ function copyToClipboard() {
     <section class="field-group block">
       <h2 class="title is-4 has-text-centered">General options</h2>
 
-      <Target v-model="refTargetState" />
-      <RestoreSession v-model="refRestoreSessionState" />
-      <UseOldSsl v-model="refUseOldSslState" />
-      <CustomPort v-model="refCustomPortState" />
-      <Login v-model="refLoginState" />
-      <Password v-model="refPasswordState" />
-      <AdditionalChecks v-model="refAdditionalChecksState" />
+      <template v-for="component in components" :key="component.name">
+        <component :is="component" :modelValue="{}" @update:modelValue="updateState(component, $event)" />
+      </template>
     </section>
 
     <section class="field-group block">
