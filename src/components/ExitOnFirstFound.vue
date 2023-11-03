@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import BasicBoolean from './form/basic-boolean.vue'
+import BasicBoolean from '@/components/form/basic-boolean.vue'
 
 const props = defineProps({
     modelValue: {
