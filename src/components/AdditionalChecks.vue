@@ -38,6 +38,8 @@ function validateAndEmit() {
   if (additionalChecksOptions.length > 0) {
     const additionalChecks = additionalChecksOptions.join('');
     emit('update:modelValue', { commandPart: `-e ${additionalChecks}`, error: null })
+  } else {
+    emit('update:modelValue', { commandPart: '', error: null })
   }
 }
 </script>
