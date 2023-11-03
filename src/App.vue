@@ -1,52 +1,23 @@
 <script setup>
-import { defineAsyncComponent, ref } from 'vue'
+import { ref } from 'vue'
 import { computed } from '@vue/reactivity';
+import General from '@/components/General.vue'
 
-const components = [
-  defineAsyncComponent(() => import('@/components/Target.vue')),
-  defineAsyncComponent(() => import('@/components/RestoreSession.vue')),
-  defineAsyncComponent(() => import('@/components/UseOldSsl.vue')),
-  defineAsyncComponent(() => import('@/components/CustomPort.vue')),
-  defineAsyncComponent(() => import('@/components/Login.vue')),
-  defineAsyncComponent(() => import('@/components/Password.vue')),
-  defineAsyncComponent(() => import('@/components/AdditionalChecks.vue')),
-  defineAsyncComponent(() => import('@/components/LoopPasswords.vue')),
-  defineAsyncComponent(() => import('@/components/ExitOnFirstFound.vue')),
-  defineAsyncComponent(() => import('@/components/CustomParallelism.vue')),
-  defineAsyncComponent(() => import('@/components/CustomTimeout.vue')),
-  defineAsyncComponent(() => import('@/components/ConnectionDelay.vue')),
-  defineAsyncComponent(() => import('@/components/AttemptDelay.vue')),
-  defineAsyncComponent(() => import('@/components/PreferIpv6.vue')),
-  defineAsyncComponent(() => import('@/components/Verbose.vue')),
-  defineAsyncComponent(() => import('@/components/ShowAttempts.vue')),
-  defineAsyncComponent(() => import('@/components/IgnoreRestore.vue')),
-]
+const errorsGeneral = ref([])
+const commandPartsGeneral = ref([])
 
-const states = ref([])
-
-states.value = components.map(() => ({}))
-
-const errors = computed(() => states.value
-  .map(({ error }) => error)
-  .filter(error => error)
-)
-
-const commandParts = computed(() => states.value
-  .map(({ commandPart }) => commandPart)
-  .filter(commandPart => commandPart)
-)
-
+const errors = computed(() => [...errorsGeneral.value])
+const commandParts = computed(() => [...commandPartsGeneral.value])
 const command = computed(() => ['hydra', ...commandParts.value].join(' '))
-
 const commandIsValid = computed(() => errors.value.length === 0)
 
 function copyToClipboard() {
   navigator.clipboard.writeText(command.value);
 }
 
-function updateState(component, newState) {
-  const i = components.indexOf(component)
-  states.value[i] = newState
+function handleUpdateGeneral(ev) {
+  errorsGeneral.value = ev.errors
+  commandPartsGeneral.value = ev.commandParts
 }
 </script>
 
@@ -63,21 +34,8 @@ function updateState(component, newState) {
       </div>
     </section>
 
-    <div class="block">
-      <section class="field-group">
-        <h2 class="title is-4 has-text-centered">General options</h2>
+    <General @update="handleUpdateGeneral" />
 
-        <template v-for="component in components" :key="component.name">
-          <component :is="component" :modelValue="{}" @update:modelValue="updateState(component, $event)" />
-        </template>
-      </section>
-    </div>
-
-    <div class="block">
-      <section class="field-group">
-        <h2 class="title is-4 has-text-centered">Service options</h2>
-      </section>
-    </div>
 
     <div class="block">
       <section class="field-group">
@@ -111,31 +69,5 @@ code {
   font-size: larger;
   background: none;
   padding: 0;
-}
-
-.field-group {
-  border: 1px solid lightgrey;
-  border-radius: 10px;
-  padding: 10px 0;
-  margin: 5px;
-}
-
-.radio {
-  user-select: none;
-}
-
-.fields-container {
-  margin: 5px;
-}
-
-@media (min-width: 960px) {
-  .field-group {
-    margin: 0 auto;
-    max-width: 960px;
-  }
-
-  .fields-container {
-    margin: 15px;
-  }
 }
 </style>

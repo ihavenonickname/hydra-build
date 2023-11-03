@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import BasicText from './form/basic-text.vue'
+import BasicText from '@/components/form/basic-text.vue'
 
 const props = defineProps({
   modelValue: {
