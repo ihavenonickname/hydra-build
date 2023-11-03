@@ -52,31 +52,47 @@ function updateState(component, newState) {
 
 <template>
   <main>
-    <div class="has-text-centered block">
-      <h1 class="title is-1">Hydra Builder</h1>
-      <p class="subtitle">A command builder for the Hydra logon cracker tool</p>
-    </div>
-
-    <section class="field-group block">
-      <h2 class="title is-4 has-text-centered">General options</h2>
-
-      <template v-for="component in components" :key="component.name">
-        <component :is="component" :modelValue="{}" @update:modelValue="updateState(component, $event)" />
-      </template>
-    </section>
-
-    <section class="field-group block">
-      <h2 class="title is-4 has-text-centered">Hydra command</h2>
-
-      <pre v-if="commandIsValid" class="has-text-centered"><code>{{ command }}</code></pre>
-      <p v-else v-for="error in errors" class="has-text-centered is-size-4">{{ error }}</p>
-
-      <div v-if="commandIsValid" class="has-text-centered">
-        <button class="button is-primary" @click="copyToClipboard">
-          Copy to clipboard
-        </button>
+    <section class="hero has-text-centered">
+      <div class="hero-body">
+        <p class="title">
+          Hydra Builder
+        </p>
+        <p class="subtitle">
+          A command builder for the Hydra logon cracker tool
+        </p>
       </div>
     </section>
+
+    <div class="block">
+      <section class="field-group">
+        <h2 class="title is-4 has-text-centered">General options</h2>
+
+        <template v-for="component in components" :key="component.name">
+          <component :is="component" :modelValue="{}" @update:modelValue="updateState(component, $event)" />
+        </template>
+      </section>
+    </div>
+
+    <div class="block">
+      <section class="field-group">
+        <h2 class="title is-4 has-text-centered">Service options</h2>
+      </section>
+    </div>
+
+    <div class="block">
+      <section class="field-group">
+        <h2 class="title is-4 has-text-centered">Hydra command</h2>
+
+        <pre v-if="commandIsValid" class="has-text-centered"><code>{{ command }}</code></pre>
+        <p v-else v-for="error in errors" class="has-text-centered is-size-4">{{ error }}</p>
+
+        <div v-if="commandIsValid" class="has-text-centered">
+          <button class="button is-primary" @click="copyToClipboard">
+            Copy to clipboard
+          </button>
+        </div>
+      </section>
+    </div>
 
     <footer class="footer">
       <div class="content has-text-centered">
